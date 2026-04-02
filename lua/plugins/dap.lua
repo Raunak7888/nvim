@@ -107,12 +107,24 @@ return {
       local dapui = require("dapui")
       local registry = require("mason-registry")
 
+      vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", numhl = "" })
+      vim.fn.sign_define("DapBreakpointCondition", {
+        text = "◆",
+        texthl = "DapBreakpointCondition",
+        numhl = "",
+      })
+      vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DapLogPoint", numhl = "" })
+      vim.fn.sign_define("DapStopped", { text = "▶", texthl = "DapStopped", numhl = "" })
+
       require("mason-nvim-dap").setup({
         ensure_installed = { "python", "codelldb" },
         automatic_installation = true,
       })
 
       dapui.setup({
+        floating = {
+          border = "rounded",
+        },
         layouts = {
           {
             elements = {

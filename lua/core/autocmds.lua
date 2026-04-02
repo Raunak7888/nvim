@@ -14,6 +14,22 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   command = "checktime",
 })
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  desc = "Create parent directories before save",
+  callback = function(event)
+    local path = vim.api.nvim_buf_get_name(event.buf)
+    if path == "" or path:match("^%w+://") then
+      return
+    end
+
+    local dir = vim.fn.fnamemodify(path, ":p:h")
+    if vim.fn.isdirectory(dir) == 0 then
+      vim.fn.mkdir(dir, "p")
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("VimResized", {
   group = group,
   desc = "Keep splits balanced",
@@ -60,6 +76,29 @@ vim.api.nvim_create_autocmd("FileType", {
       silent = true,
       desc = "Close window",
     })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  desc = "Polish prose buffers",
+  pattern = { "gitcommit", "markdown", "text" },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.spell = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.colorcolumn = ""
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = group,
+  desc = "Terminal defaults",
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
   end,
 })
 

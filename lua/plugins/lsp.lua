@@ -54,122 +54,26 @@ return {
     },
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
-      "neovim/nvim-lspconfig",
+      "hrsh7th/cmp-nvim-lsp",
       "b0o/SchemaStore.nvim",
+      "SmiteshP/nvim-navic",
     },
     config = function()
-      local mason_lspconfig = require("mason-lspconfig")
-      local lspconfig = require("lspconfig")
-      local lspconfig_util = require("lspconfig.util")
-      local schemastore = require("schemastore")
-      local lsp = require("util.lsp")
+      local logger = require("core.logs")
+      logger.wrap("lsp.setup", function()
+        require("nvim-navic").setup({
+          depth_limit = 5,
+          highlight = true,
+          lazy_update_context = true,
+          separator = " 󰁔 ",
+        })
 
-      lsp.setup()
-
-      mason_lspconfig.setup({
-        ensure_installed = {
-          "bashls",
-          "basedpyright",
-          "clangd",
-          "jsonls",
-          "lua_ls",
-          "ts_ls",
-        },
-        automatic_installation = true,
-      })
-
-      local servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = "Replace",
-              },
-              diagnostics = {
-                globals = { "vim" },
-              },
-              hint = {
-                enable = true,
-              },
-              runtime = {
-                version = "LuaJIT",
-              },
-              workspace = {
-                checkThirdParty = false,
-              },
-            },
-          },
-        },
-        basedpyright = {
-          settings = {
-            basedpyright = {
-              analysis = {
-                autoImportCompletions = true,
-                diagnosticMode = "openFilesOnly",
-                inlayHints = {
-                  callArgumentNames = true,
-                  functionReturnTypes = true,
-                  pytestParameters = true,
-                  variableTypes = true,
-                },
-                typeCheckingMode = "standard",
-              },
-            },
-          },
-        },
-        ts_ls = {
-          single_file_support = false,
-          root_dir = lspconfig_util.root_pattern(
-            "tsconfig.json",
-            "jsconfig.json",
-            "package.json",
-            ".git"
-          ),
-          init_options = {
-            hostInfo = "neovim",
-            preferences = {
-              includeCompletionsForImportStatements = true,
-              includeCompletionsForModuleExports = true,
-            },
-          },
-        },
-        clangd = {
-          cmd = {
-            "clangd",
-            "--background-index",
-            "--clang-tidy",
-            "--completion-style=detailed",
-            "--fallback-style=llvm",
-            "--function-arg-placeholders",
-            "--header-insertion=iwyu",
-          },
-          root_dir = lspconfig_util.root_pattern(
-            "compile_commands.json",
-            "compile_flags.txt",
-            ".clangd",
-            ".git"
-          ),
-        },
-        bashls = {},
-        jsonls = {
-          settings = {
-            json = {
-              validate = { enable = true },
-              schemas = schemastore.json.schemas(),
-            },
-          },
-        },
-      }
-
-      for server, opts in pairs(servers) do
-        opts.capabilities = vim.tbl_deep_extend("force", {}, lsp.capabilities, opts.capabilities or {})
-        opts.on_attach = opts.on_attach or lsp.on_attach
-        lspconfig[server].setup(opts)
-      end
+        require("lsp").setup()
+      end)
     end,
   },
   {

@@ -12,6 +12,16 @@ return {
     cmd = "Telescope",
     keys = {
       {
+        "<leader><Space>",
+        function()
+          require("telescope.builtin").find_files({
+            hidden = true,
+            no_ignore = true,
+          })
+        end,
+        desc = "Find files",
+      },
+      {
         "<leader>ff",
         function()
           require("telescope.builtin").find_files({
@@ -59,6 +69,20 @@ return {
         desc = "Recent files",
       },
       {
+        "<leader>fk",
+        function()
+          require("telescope.builtin").keymaps()
+        end,
+        desc = "Keymaps",
+      },
+      {
+        "<leader>fc",
+        function()
+          require("telescope.builtin").commands()
+        end,
+        desc = "Commands",
+      },
+      {
         "<leader>fs",
         function()
           require("telescope.builtin").lsp_document_symbols()
@@ -78,6 +102,13 @@ return {
           require("telescope.builtin").diagnostics()
         end,
         desc = "Diagnostics",
+      },
+      {
+        "<leader>f/",
+        function()
+          require("telescope.builtin").current_buffer_fuzzy_find()
+        end,
+        desc = "Search current buffer",
       },
       {
         "<leader>fw",
@@ -118,7 +149,10 @@ return {
       return {
         defaults = {
           path_display = { "smart" },
+          prompt_prefix = "   ",
+          selection_caret = "  ",
           sorting_strategy = "ascending",
+          winblend = 0,
           layout_config = {
             horizontal = {
               prompt_position = "top",

@@ -7,18 +7,20 @@ vim.g.python3_host_prog = vim.fn.exepath("python")
 
 opt.backup = false
 opt.clipboard = "unnamedplus"
+opt.cmdheight = 0
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.conceallevel = 2
 opt.confirm = true
 opt.cursorline = true
+opt.cursorlineopt = { "number", "line" }
 opt.expandtab = true
 opt.fillchars = {
   eob = " ",
   fold = " ",
-  foldopen = "v",
-  foldclose = ">",
+  foldopen = "",
+  foldclose = "",
   foldsep = " ",
-  diff = "/",
+  diff = "╱",
 }
 opt.foldcolumn = "1"
 opt.foldenable = true
@@ -55,10 +57,12 @@ opt.shiftround = true
 opt.shiftwidth = 2
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 opt.showmode = false
+opt.showtabline = 2
 opt.sidescrolloff = 8
 opt.signcolumn = "yes"
 opt.smartcase = true
 opt.smartindent = true
+opt.smoothscroll = true
 opt.softtabstop = 2
 opt.splitbelow = true
 opt.splitkeep = "screen"
@@ -70,6 +74,7 @@ opt.timeoutlen = 300
 opt.undofile = true
 opt.updatetime = 200
 opt.virtualedit = "block"
+opt.winborder = "rounded"
 opt.winminwidth = 5
 opt.wrap = false
 

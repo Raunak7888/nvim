@@ -28,11 +28,18 @@ return {
       local cmp = require("cmp")
       local luasnip = require("luasnip")
       local lspkind = require("lspkind")
+      local icons = require("util.icons")
 
       cmp.setup({
         completion = {
           completeopt = "menu,menuone,noinsert",
         },
+        experimental = {
+          ghost_text = {
+            hl_group = "Comment",
+          },
+        },
+        preselect = cmp.PreselectMode.None,
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -43,7 +50,12 @@ return {
             mode = "symbol_text",
             maxwidth = 50,
             ellipsis_char = "...",
+            symbol_map = icons.kinds,
           }),
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
           ["<C-Space>"] = cmp.mapping.complete(),
@@ -92,6 +104,87 @@ return {
           { name = "cmdline" },
         }),
       })
+    end,
+  },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    keys = {
+      {
+        "<leader>rr",
+        function()
+          require("telescope").extensions.refactoring.refactors()
+        end,
+        mode = { "n", "x" },
+        desc = "Refactor menu",
+      },
+      {
+        "<leader>re",
+        function()
+          require("refactoring").refactor("Extract Function")
+        end,
+        mode = "x",
+        desc = "Extract function",
+      },
+      {
+        "<leader>rE",
+        function()
+          require("refactoring").refactor("Extract Function To File")
+        end,
+        mode = "x",
+        desc = "Extract function to file",
+      },
+      {
+        "<leader>rv",
+        function()
+          require("refactoring").refactor("Extract Variable")
+        end,
+        mode = "x",
+        desc = "Extract variable",
+      },
+      {
+        "<leader>ri",
+        function()
+          require("refactoring").refactor("Inline Variable")
+        end,
+        mode = { "n", "x" },
+        desc = "Inline variable",
+      },
+      {
+        "<leader>rb",
+        function()
+          require("refactoring").refactor("Extract Block")
+        end,
+        desc = "Extract block",
+      },
+      {
+        "<leader>rB",
+        function()
+          require("refactoring").refactor("Extract Block To File")
+        end,
+        desc = "Extract block to file",
+      },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim",
+    },
+    opts = {},
+    config = function(_, opts)
+      local logger = require("core.logs")
+      logger.wrap("refactoring.setup", function()
+        local refactoring = logger.require("refactoring", { silent = true, context = "refactoring" })
+        if not refactoring then
+          return
+        end
+
+        refactoring.setup(opts)
+
+        local telescope = logger.require("telescope", { silent = true, context = "telescope.refactoring" })
+        if telescope then
+          telescope.load_extension("refactoring")
+        end
+      end)
     end,
   },
   {

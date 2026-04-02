@@ -4,6 +4,7 @@ return {
     cmd = "Neotree",
     keys = {
       { "<leader>e", "<cmd>Neotree toggle filesystem reveal left<cr>", desc = "Explorer" },
+      { "<leader>E", "<cmd>Neotree focus filesystem left<cr>", desc = "Focus explorer" },
       { "<leader>ge", "<cmd>Neotree float git_status<cr>", desc = "Git explorer" },
     },
     dependencies = {
@@ -102,6 +103,23 @@ return {
     keys = {
       { "gc", mode = { "n", "v" } },
       { "gb", mode = { "n", "v" } },
+      {
+        "<leader>/",
+        function()
+          require("Comment.api").toggle.linewise.current()
+        end,
+        desc = "Toggle comment",
+      },
+      {
+        "<leader>/",
+        mode = "x",
+        function()
+          local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+          vim.api.nvim_feedkeys(esc, "nx", false)
+          require("Comment.api").toggle.linewise(vim.fn.visualmode())
+        end,
+        desc = "Toggle comment",
+      },
     },
     opts = {},
   },
@@ -145,6 +163,26 @@ return {
         end,
         desc = "Stop session saving",
       },
+    },
+  },
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    cmd = { "ToggleTerm", "TermExec" },
+    keys = {
+      { "<leader>tt", "<cmd>ToggleTerm direction=float<cr>", desc = "Float terminal" },
+      { "<leader>th", "<cmd>ToggleTerm size=14 direction=horizontal<cr>", desc = "Horizontal terminal" },
+      { "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", desc = "Vertical terminal" },
+    },
+    opts = {
+      direction = "float",
+      float_opts = {
+        border = "curved",
+      },
+      persist_mode = true,
+      persist_size = true,
+      shade_terminals = false,
+      start_in_insert = true,
     },
   },
 }

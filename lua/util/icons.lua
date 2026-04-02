@@ -3,13 +3,13 @@ local M = {}
 M.diagnostics = {
   Error = " ",
   Warn = " ",
-  Hint = " ",
+  Hint = "󰌵 ",
   Info = " ",
 }
 
 M.git = {
-  added = "┃",
-  changed = "┋",
+  added = "│",
+  changed = "│",
   removed = "_",
 }
 
@@ -17,13 +17,9 @@ M.kinds = {
   Array = " ",
   Boolean = "󰨙 ",
   Class = " ",
-  Codeium = "󰘦 ",
   Color = " ",
-  Control = " ",
-  Collapsed = " ",
   Constant = "󰏿 ",
   Constructor = " ",
-  Copilot = " ",
   Enum = " ",
   EnumMember = " ",
   Event = " ",
